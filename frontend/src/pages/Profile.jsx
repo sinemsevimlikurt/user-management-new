@@ -157,11 +157,13 @@ const Profile = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Roller</label>
                     <div className="flex flex-wrap gap-2">
-                      {userData.roles?.map((role, index) => (
-                        <span key={index} className="px-2 py-1 bg-gray-200 text-gray-800 text-xs font-medium rounded">
-                          {typeof role === 'string' ? role.replace('ROLE_', '') : role}
-                        </span>
-                      ))}
+                    {userData.roles?.map((role, index) => (
+  <span key={index} className="px-2 py-1 bg-gray-200 text-gray-800 text-xs font-medium rounded">
+    {typeof role === 'string'
+      ? role.replace('ROLE_', '')
+      : role.name?.replace('ROLE_', '') ?? 'Bilinmeyen Rol'}
+  </span>
+))}
                     </div>
                   </div>
                 </div>

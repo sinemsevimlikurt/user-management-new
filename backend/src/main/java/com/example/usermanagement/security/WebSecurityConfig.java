@@ -40,16 +40,6 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        
-        return authProvider;
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
@@ -58,53 +48,36 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173", "http://localhost:5176"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
     
-    // We're using WebConfig for CORS configuration instead
-    
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("WebSecurityConfig: Configuring security filter chain");
-        
-        // Disable CSRF as we're using stateless JWT authentication
-        http.csrf(csrf -> csrf.disable());
-        
-        // Configure CORS - use default configuration which will pick up our WebConfig
-        http.cors(cors -> {});
-        
-        // Configure exception handling
-        http.exceptionHandling(exception -> 
-            exception.authenticationEntryPoint(unauthorizedHandler)
-        );
-        
-        // Configure session management to be stateless
-        http.sessionManagement(session -> 
-            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
-        
-        // Configure authorization rules
-        http.authorizeHttpRequests(auth -> 
-            auth
-                .requestMatchers("/api/auth/**", "/auth/**", "/api/auth/signin", "/auth/signin").permitAll()
-                .requestMatchers("/api/test/**", "/test/**").permitAll()
+        http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
-        );
-        
-        // Log the security configuration
-        System.out.println("WebSecurityConfig: Explicitly allowing access to /api/auth/signin and /auth/signin");
-        
-        // Configure authentication provider
-        http.authenticationProvider(authenticationProvider());
-        
-        // Add JWT filter before UsernamePasswordAuthenticationFilter
+            )
+            .exceptionHandling(e -> e.authenticationEntryPoint(unauthorizedHandler))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        http.headers(headers -> headers.frameOptions().disable());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        
-        // Configure frame options for H2 console
-        http.headers(headers -> 
-            headers.frameOptions(frameOption -> frameOption.sameOrigin())
-        );
-        
-        System.out.println("WebSecurityConfig: Security filter chain configured successfully");
+
         return http.build();
     }
 }

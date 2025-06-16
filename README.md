@@ -1,39 +1,40 @@
 # User Management System
 
-A comprehensive user management system with a Spring Boot backend and React frontend, featuring JWT authentication, role-based authorization, and a responsive UI.
+A comprehensive user management system developed with Spring Boot backend and React frontend, featuring JWT authentication, role-based authorization, and a modern user interface.
 
 ## Project Structure
 
 The project is organized into two main directories:
 
 - **`/backend`**: Spring Boot application with JWT authentication and RESTful APIs
-- **`/frontend`**: React application with Tailwind CSS for the user interface
+- **`/frontend`**: React application with Tailwind CSS for modern UI
 
 ## Technologies Used
 
 ### Backend
 - **Java 17**
 - **Spring Boot 3.2.0**
-- **Spring Security** with JWT authentication
-- **Spring Data JPA** for database operations
-- **H2 Database** (can be switched to PostgreSQL)
-- **Maven** for dependency management
-- **Lombok** for reducing boilerplate code
+- **Spring Security** (JWT authentication)
+- **Spring Data JPA** (database operations)
+- **H2 Database** (for development environment)
+- **Maven** (dependency management)
+- **Lombok** (to reduce boilerplate code)
 
 ### Frontend
-- **React** with functional components and hooks
-- **React Router** for navigation
-- **Axios** for API requests
-- **Tailwind CSS** for styling
-- **JWT** for authentication
+- **React** (functional components and hooks)
+- **Vite** (fast development environment)
+- **React Router** (page navigation)
+- **Axios** (API requests)
+- **Tailwind CSS** (modern and responsive design)
+- **JWT** (authentication)
 
 ## Features
 
 - User registration and login with JWT authentication
 - Role-based authorization with Spring Security
-- Protected routes for authenticated users
+- Protected routes requiring authentication
 - User profile management
-- Admin dashboard for user management
+- Admin panel for user management
 - Responsive UI with Tailwind CSS
 - JWT token validation and automatic logout on expiration
 
@@ -63,7 +64,7 @@ The project is organized into two main directories:
    mvn spring-boot:run
    ```
 
-The backend will start on `http://localhost:8080`.
+The backend will run at `http://localhost:8080`.
 
 ### Frontend Installation
 
@@ -77,12 +78,12 @@ The backend will start on `http://localhost:8080`.
    npm install
    ```
 
-3. Run the development server:
+3. Start the development server:
    ```bash
-   npm start
+   npm run dev
    ```
 
-The frontend will start on `http://localhost:3000`.
+The frontend will run at `http://localhost:5173`.
 
 ### H2 Database Console
 
@@ -118,3 +119,39 @@ The system creates a default admin user on startup:
 - Username: `admin`
 - Password: `admin123`
 - Roles: `ROLE_ADMIN`
+
+## Project Structure Details
+
+### Backend Components
+
+- **Controller**: Classes that manage API endpoints
+  - `AuthController`: Authentication operations
+  - `UserController`: User management
+  - `TestController`: Test endpoints
+
+- **Service**: Layer containing business logic
+  - `AuthService`: Authentication operations
+  - `UserService`: User operations
+
+- **Repository**: Database operations
+  - `UserRepository`: User database operations
+  - `RoleRepository`: Role database operations
+
+- **Model**: Database entities
+  - `User`: User entity
+  - `Role`: Role entity
+
+- **Security**: Security configuration
+  - JWT authentication
+  - Role-based authorization
+
+### Frontend Components
+
+- **Components**: Reusable UI components
+- **Pages**: Application pages
+- **Services**: API requests and data operations
+- **Utils**: Helper functions and constants
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.

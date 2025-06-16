@@ -1,17 +1,18 @@
 package com.example.usermanagement.config;
 
-import com.example.usermanagement.model.ERole;
-import com.example.usermanagement.model.Role;
-import com.example.usermanagement.model.User;
-import com.example.usermanagement.repository.RoleRepository;
-import com.example.usermanagement.repository.UserRepository;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.example.usermanagement.model.ERole;
+import com.example.usermanagement.model.Role;
+import com.example.usermanagement.model.User;
+import com.example.usermanagement.repository.RoleRepository;
+import com.example.usermanagement.repository.UserRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -37,11 +38,11 @@ public class DataInitializer implements CommandLineRunner {
     private void initRoles() {
         if (roleRepository.count() == 0) {
             Role userRole = new Role();
-            userRole.setName(ERole.USER);
+            userRole.setName(ERole.ROLE_USER);
             roleRepository.save(userRole);
 
             Role adminRole = new Role();
-            adminRole.setName(ERole.ADMIN);
+            adminRole.setName(ERole.ROLE_ADMIN);
             roleRepository.save(adminRole);
             
             System.out.println("Roles initialized successfully");
@@ -58,7 +59,7 @@ public class DataInitializer implements CommandLineRunner {
             adminUser.setEnabled(true);
 
             Set<Role> adminRoles = new HashSet<>();
-            Role adminRole = roleRepository.findByName(ERole.ADMIN)
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Admin Role not found."));
             adminRoles.add(adminRole);
             adminUser.setRoles(adminRoles);
@@ -76,7 +77,7 @@ public class DataInitializer implements CommandLineRunner {
             regularUser.setEnabled(true);
 
             Set<Role> userRoles = new HashSet<>();
-            Role userRole = roleRepository.findByName(ERole.USER)
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: User Role not found."));
             userRoles.add(userRole);
             regularUser.setRoles(userRoles);

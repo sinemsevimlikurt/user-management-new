@@ -31,7 +31,7 @@ public class UserController {
      * Get all users - accessible only to admins
      * @return list of all users
      */
-    @GetMapping({"all", "/all"})
+    @GetMapping({"", "/", "all", "/all"})
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         logger.info("getAllUsers: Received request to get all users");
